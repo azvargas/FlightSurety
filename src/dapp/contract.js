@@ -12,6 +12,7 @@ export default class Contract {
         this.owner = null;
         this.airlines = [];
         this.passengers = [];
+        this.timeStamp = 1638871200;
     }
 
     initialize(callback) {
@@ -50,6 +51,21 @@ export default class Contract {
         self.flightSuretyApp.methods
             .fetchFlightStatus(payload.airline, payload.flight, payload.timestamp)
             .send({ from: self.owner}, (error, result) => {
+                callback(error, payload);
+            });
+    }
+
+    buyInsurance(airline, flightNumber, price, callback) {
+        let self = this;
+        let payload = {
+            airline: airline,
+            flightNumber: flightNumber,
+            timestamp: self.timeStamp
+        }
+        let amount = Web3.utils.toWei(price, "ether");
+        self.flightSuretyApp.methods
+            .buyInsurance(payload.airline, payload.flightNumber, payload.timestamp)
+            .send({from:self.passengers[0], value:amount}, (error, result) => {
                 callback(error, payload);
             });
     }

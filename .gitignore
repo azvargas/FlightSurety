@@ -64,3 +64,12 @@ typings/
 .env
 
 ~$*.pptx
+soljson-v0.4.24+commit.e67f0147.js
+bin/contracts/FlightSuretyData.json
+bin/contracts/FlightSuretyData.bin
+bin/contracts/FlightSuretyData.abi
+bin/contracts/FlightSuretyApp.json
+bin/contracts/FlightSuretyApp.bin
+bin/contracts/FlightSuretyApp.abi
+bin/contracts/FlightSuretyApp-solc-output.json
+.vscode/settings.json

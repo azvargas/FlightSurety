@@ -33,7 +33,11 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({ 
-      template: path.join(__dirname, "src/dapp/index.html")
+      template: path.join(__dirname, "src/dapp/index.html"),
+    }),
+    new HtmlWebpackPlugin({ 
+      filename: "passengers.html",
+      template: path.join(__dirname, "src/dapp/passengers.html"),
     })
   ],
   resolve: {

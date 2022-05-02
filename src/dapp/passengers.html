@@ -19,8 +19,8 @@
 
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-              <a class="nav-item nav-link" href="passengers.html">Passengers</a>
+              <a class="nav-item nav-link" href="index.html">Home</a>
+              <a class="nav-item nav-link active" href="#">Passengers <span class="sr-only">(current)</span></a>
             </div>
         </div>
     </nav>
@@ -33,10 +33,20 @@
         <div id="display-wrapper" class="top-20">
         </div>
 
+        <h5>Buy Insurance</h5>
         <div class="row top-20">
-            <label class="form">Flight</label> <input type="text" id="flight-number"> <btn class="btn btn-primary" id="submit-oracle">Submit to Oracles</btn>
+            <label class="form">Airline address</label><input type="text" id="airline-address">
         </div>
-    </main>
+        <div class="row top-20">
+            <label class="form">Flight number</label><input type="text" id="flight-number">
+        </div>
+        <div class="row top-20">
+            <label class="form">Amount</label><input type="text" id="amount-insurance"><label class="form">ether</label>
+        </div>
+        <div class="row top-20">
+            <btn class="btn btn-primary" id="buy-insurance">Buy Insurance</btn>
+        </div>
+</main>
 
 </body>
 
