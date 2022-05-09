@@ -19,8 +19,9 @@ contract FlightSuretyData {
     function isFlightRegistered (bytes32 flightKey) external view returns(bool);
     function registerFlight(address airline, string flightNumber, uint256 timestamp) external;
     function updateFlightStatus(bytes32 flightKey, uint8 newStatus) external;
-    function buy(address passenger, bytes32 flightKey, uint256 price) external;
+    function buy(address passenger, bytes32 flightKey, uint price) external returns(uint);
     function creditInsurees(address p_passenger) external returns(uint256 totalAmountToPay);
+    function pay(address p_passenger) external returns(uint256);
 }
 
 /************************************************** */
@@ -41,7 +42,7 @@ contract FlightSuretyApp {
     uint8 private constant STATUS_CODE_LATE_TECHNICAL = 40;
     uint8 private constant STATUS_CODE_LATE_OTHER = 50;
 
-    uint256 public constant INSURANCE_AMOUNT = 1 ether;
+    uint public constant INSURANCE_AMOUNT = 1 ether;
 
     FlightSuretyData dataContract;
 
@@ -49,7 +50,7 @@ contract FlightSuretyApp {
 
     mapping(address => address[]) private newAirlineVotes;
 
-    event InsuranceBought(bool success);
+    event InsuranceBought(uint InsuranceId);
 
     /********************************************************************************************/
     /*                                       FUNCTION MODIFIERS                                 */
@@ -223,15 +224,14 @@ contract FlightSuretyApp {
                             requireIsOperational
                             external
                             payable
-                            returns(string, bool)
     {
         require(msg.value <= INSURANCE_AMOUNT, "The insurance amount should be less or equal than 1 ether");
         bytes32 flightKey = getFlightKey(airline, flightNumber, timestamp);
         require(dataContract.isFlightRegistered(flightKey), "The flight is not registered");
-        uint256 amount = msg.value;
-        dataContract.buy(msg.sender, flightKey, amount);
+        uint amount = msg.value;
+        uint InsuranceId = dataContract.buy(msg.sender, flightKey, amount);
         airline.transfer(amount);
-        emit InsuranceBought(true);
+        emit InsuranceBought(InsuranceId);
     }
 
    /**
@@ -249,6 +249,23 @@ contract FlightSuretyApp {
         totalAmountToPay = dataContract.creditInsurees(msg.sender);
         return totalAmountToPay;
     }
+
+
+   /**
+    * @dev Function to payout the amount to insurees
+    *
+    */  
+    function insurancePayout
+                                (
+
+                                )
+                                external 
+                                requireIsOperational
+                                returns(uint256 amountPayed)
+    {
+        amountPayed = dataContract.pay(msg.sender);
+    }
+
 
    /**
     * @dev Called after oracle has updated flight status
@@ -357,11 +374,11 @@ contract FlightSuretyApp {
                             )
                             view
                             external
-                            returns(uint8[3])
+                            returns(address, uint8[3])
     {
         require(oracles[msg.sender].isRegistered, "Not registered as an oracle");
 
-        return oracles[msg.sender].indexes;
+        return (msg.sender, oracles[msg.sender].indexes);
     }
 
 
